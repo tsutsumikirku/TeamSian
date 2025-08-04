@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using DG.Tweening;
 public class PutPlate : MonoBehaviour
 {
     [SerializeField][Header("お皿のオブジェクト")] private GameObject plateObject;
@@ -18,93 +18,114 @@ public class PutPlate : MonoBehaviour
 
     public void Update()
     {
-        // 常にX座標を0に保つ（横ズレ対策）
-        foreach (GameObject obj in _itemList)
+        // オブジェクトを順に積み直す（ズレ対策）
+        float positionY = putTopPosition;
+
+        for (int i = 0; i < _itemList.Count; i++)
         {
-            Vector3 position = obj.transform.localPosition;
-            position.x = 0f;
-            obj.transform.localPosition = position;
+            GameObject obj = _itemList[i];
+            Collider2D col = obj.GetComponent<Collider2D>();
+            if (col != null)
+            {
+                // 高さ＋補正
+                positionY += col.bounds.size.y;
+                positionY -= col.offset.y;
+                positionY += interval;
+            }
+
+            Collider2D newCol = obj.GetComponent<Collider2D>();
+            if (newCol != null)
+            {
+                float centerOffset = newCol.bounds.size.y / 2f - newCol.offset.y;
+                float localY = positionY + centerOffset;
+
+                Vector3 newLocalPos = obj.transform.localPosition;
+                newLocalPos.x = 0f;
+                newLocalPos.y = localY;
+                obj.transform.localPosition = newLocalPos;
+            }
+
+            // ソート順も再設定
+            SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                sr.sortingLayerName = "PlateItems";
+                sr.sortingOrder = i;
+            }
+
+            // 全てTriggerにしておいて…
+            if (col != null) col.isTrigger = true;
+        }
+
+        // 最後のオブジェクトだけ Trigger = false（当たり判定ON）
+        if (_itemList.Count > 0)
+        {
+            GameObject last = _itemList[_itemList.Count - 1];
+            Collider2D lastCol = last.GetComponent<Collider2D>();
+            if (lastCol != null)
+            {
+                lastCol.isTrigger = false;
+            }
+
+            if (last.GetComponent<PlateCollider>() == null)
+            {
+                last.AddComponent<PlateCollider>();
+            }
         }
     }
+    public void BurgerReset()
+    {
+        foreach(GameObject obj in  _itemList)
+        {
+            Destroy(obj);
+        }
+        _itemList.Clear();
+        plateObject.AddComponent<PlateCollider>();  
 
+    }
     public void Put(GameObject prefab, Sprite image)
     {
         GameObject newObject = Instantiate(prefab);
-
         // 不要なコンポーネント削除
         Destroy(newObject.GetComponent<Rigidbody>());
         Destroy(newObject.GetComponent<ItemControl>());
 
         // スプライト設定
-        if (image != null)
+        SpriteRenderer sr = newObject.GetComponent<SpriteRenderer>();
+        if (image != null && sr != null)
         {
-            SpriteRenderer sr = newObject.GetComponent<SpriteRenderer>();
-            if (sr != null) sr.sprite = image;
+            sr.sprite = image;
         }
 
-        // 親を設定
+        // 親設定と初期位置（YはUpdateで再計算するので仮置き）
         newObject.transform.SetParent(plateObject.transform);
+        newObject.transform.localPosition = Vector3.zero;
 
-        // 高さを計算（中心を基準に積む）
-        float positionY = putTopPosition;
-
-        foreach (GameObject item in _itemList)
-        {
-            Collider2D col = item.GetComponent<Collider2D>();
-            if (col != null)
-            {
-                positionY += col.bounds.size.y;      // 高さ分積み上げ
-                positionY -= col.offset.y;           // コライダー中心補正
-                positionY += interval;               // 隙間
-            }
-        }
-
-        // 新しいオブジェクト自身の中心補正
-        Collider2D newCol = newObject.GetComponent<Collider2D>();
-        if (newCol != null)
-        {
-            positionY += newCol.bounds.size.y / 2f;
-            positionY -= newCol.offset.y;
-        }
-
-        // 位置を設定
-        Vector3 position = Vector3.zero;
-        position.x = 0f;
-        position.y = positionY;
-        newObject.transform.localPosition = position;
-
-        // コライダー設定
-        if (newCol != null) newCol.isTrigger = true;
-
-        // ソート順設定（手前に積む）
-        SpriteRenderer newSR = newObject.GetComponent<SpriteRenderer>();
-        if (newSR != null)
-        {
-            newSR.sortingLayerName = "PlateItems";  // Unityで定義しておく
-            newSR.sortingOrder = _itemList.Count;
-        }
-
-        // リストに追加
         _itemList.Add(newObject);
 
-        // ゲームの進行通知など
         FindAnyObjectByType<PhaseAddItem>()?.AddItem(_itemList.Count);
 
-        // PlateColliderの管理
+        // Collider初期設定
+        Collider2D col = newObject.GetComponent<Collider2D>();
+        if (col != null) col.isTrigger = true;
+
+        // PlateCollider管理（全削除 → 最後に再設定）
         if (plateObject.GetComponent<PlateCollider>() != null)
         {
             Destroy(plateObject.GetComponent<PlateCollider>());
-            plateObject.GetComponent<Collider2D>().isTrigger = true;
         }
 
         foreach (GameObject item in _itemList)
         {
             Destroy(item.GetComponent<PlateCollider>());
-            item.GetComponent<Collider2D>().isTrigger = true;
         }
 
-        // 最後のオブジェクトだけ当たり判定ON
-        newObject.AddComponent<PlateCollider>();
-        newCol.isTrigger = false;
+        // ※位置や当たり判定などの処理はUpdateで毎フレーム再計
+        //plateObject.transform.DOPunchPosition(new Vector3(0, 0.5f, 0), 0.5f, 3, 1f);
+
+        if (prefab.GetComponent<ItemCollision>().itemName == "バンズ")
+        {
+            BurgerReset();
+        }
     }
 }

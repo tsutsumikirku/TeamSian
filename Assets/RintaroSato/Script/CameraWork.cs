@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using DG.Tweening;
 public class CameraWork : MonoBehaviour
 { 
     public PutPlate other; // インスペクタからアサイン
@@ -9,8 +9,13 @@ public class CameraWork : MonoBehaviour
     public float smoothSpeed = 5f;
     public float yOffsetThreshold = 0.5f;
 
+    [Tooltip("移動にかかる時間（秒）")]
+    [SerializeField] private float duration = 1f;
     private Camera _camera;
-
+    public void CameraReset()
+    {
+        _camera.gameObject.transform.DOMoveY(1,1f);
+    }
     void Start()
     {
         _camera = Camera.main;
