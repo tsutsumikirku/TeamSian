@@ -17,6 +17,7 @@ public class ItemDrop : MonoBehaviour
     [SerializeField][Header("アイテムが落ちる頻度　最大値")] private float intervalMax;
     [SerializeField][Header("アイテムを落とす横幅")] private float width;
     [SerializeField][Header("アイテムを落とす高さ")] private float height;
+    [SerializeField] private GameObject cameraObject;
     private float timer = 0f;
     private float intervalTime;
     private int probabilityTotal;
@@ -37,6 +38,7 @@ public class ItemDrop : MonoBehaviour
             timer = 0f;
         }
         timer += Time.deltaTime;
+        height = cameraObject.transform.position.y + 13;
     }
     public void ItemClone()
     {
