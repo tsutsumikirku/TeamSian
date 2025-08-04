@@ -125,11 +125,15 @@ public class ScoreManager : MonoBehaviour
                 seachStringQueue.Dequeue();
             }
             string[] searchString = seachStringQueue.ToArray();
+            bool isSuccess = true;
             for (int j = 0; j < synergyList.SynergyConditions.Count; j ++)//レシピの数だけ繰り返す
             {
                 string judgIngredientsName = givenBurgers[j].Name;//レシピのj番目の名前 → 0,1,2,3,4,
                 string judgCondition = searchString[i];//i番目にある具材の名前 → jの検索が終わった後に具材が更新される
-
+                if (judgIngredientsName != judgCondition)
+                {
+                    isSuccess = false;
+                }
             }
         }
         return successConditionsScore;
