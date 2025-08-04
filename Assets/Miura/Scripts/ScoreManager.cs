@@ -78,22 +78,18 @@ public class ScoreManager : MonoBehaviour
     public void ScoreCount(List<Food> foods)
     {
         //初期化
-        List<Queue<ScripableObjectHoge>> synergyList = new List<Queue<ScripableObjectHoge>>();
-        List<Queue<Food>> givenBurgers = new List<Queue<Food>>();
+        List<ScripableObjectHoge> synergyList = new List<ScripableObjectHoge>();//レシピ分だけ作成
+        List<Food[]> givenBurgers = new List<Food[]>();//渡されたバーガーをレシピぶん複製している[foods.Count][foods]←バーガーに積まれている全具材　→　
         for (int i = 0; i < ScripableObjects.Length; i++)//レシピ数
         {
-            synergyList[i] = new Queue<ScripableObjectHoge>();
-            for (int j = 0; j < ScripableObjects.Length; j++)
-            {
-                synergyList[i].Enqueue(ScripableObjects[j]);//List.Count == ScripableObjects.Length
-            }
+            synergyList.Add(ScripableObjects[i]);
         }
         for (int i = 0; i < ScripableObjects.Length; i++)//レシピ数
         {
-            givenBurgers[i] = new Queue<Food>();
+            givenBurgers.Add(new Food[foods.Count]);
             for (int j = 0; j < foods.Count; j++)
             {
-                givenBurgers[i].Enqueue(foods[j]);//givenBurgers.Count == ScripableObjects.Length
+                givenBurgers[i][j] = foods[j];//givenBurgers.Count == ScripableObjects.Length
             }
         }
         //全パターンシナジー条件が割り出されている前提で
@@ -101,24 +97,42 @@ public class ScoreManager : MonoBehaviour
         //やるべきこと
         ///・givenBurgersに
         ///・
-        for (int i = 0; i < ScripableObjects.Length; i++)//具材の種類
+        for (int i = 0; i < synergyList.Count; i++)//レシピの数
         {
-            ScripableObjectHoge successConditions = new ScripableObjectHoge();
-            for (int j = 0; j < foods.Count; j++)//全パターンの条件を検索するのに必要
-            {
-                successConditions = JudgmentSuccessConditions();
-            }
+            int successConditionsScore = 0;
+            successConditionsScore = JudgmentSuccessConditionsScore(synergyList[i], givenBurgers[i]);
+
+            //for (int j = 0; j < foods.Count; j++)//全パターンの条件を検索するのに必要
+            //{
+            //    successConditions = JudgmentSuccessConditions();
+            //}
             int synergyScore = 0;
             
-            synergyScore = successConditions.SynergyScore;
+            synergyScore = successConditionsScore;
             TotalScore += GetCalculateGivenScore(synergyScore, foods[i].Score);
         }
     }
-    ScripableObjectHoge JudgmentSuccessConditions()
+    int JudgmentSuccessConditionsScore(ScripableObjectHoge synergyList, Food[] givenBurgers)//条件は一度しか試されない・Foodは複製されたQueueの中からひとつだけ試される
     {
+        int successConditionsScore = 0;
+        List<string> SynergyConditions = synergyList.SynergyConditions; //レシピ一つ分（stringのコレクション）
+        Queue<string> seachStringQueue = new Queue<string>();
+        for (int i = 0; i < givenBurgers.Length; i++)//具材の種類ぶん繰り返す
+        {
+            seachStringQueue.Enqueue(givenBurgers[i].Name);
+            if (seachStringQueue.Count > SynergyConditions.Count)
+            {
+                seachStringQueue.Dequeue();
+            }
+            string[] searchString = seachStringQueue.ToArray();
+            for (int j = 0; j < synergyList.SynergyConditions.Count; j ++)//レシピの数だけ繰り返す
+            {
+                string judgIngredientsName = givenBurgers[j].Name;//レシピのj番目の名前 → 0,1,2,3,4,
+                string judgCondition = searchString[i];//i番目にある具材の名前 → jの検索が終わった後に具材が更新される
 
-        ScripableObjectHoge successConditions = new ScripableObjectHoge();
-        return successConditions;
+            }
+        }
+        return successConditionsScore;
     }
 }
 public interface Food
