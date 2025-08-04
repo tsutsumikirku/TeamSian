@@ -9,6 +9,8 @@ public class CameraWork : MonoBehaviour
     public float smoothSpeed = 5f;
     public float yOffsetThreshold = 0.5f;
 
+    [Tooltip("ˆÚ“®‚É‚©‚©‚éŠÔi•bj")]
+    [SerializeField] private float duration = 1f;
     private Camera _camera;
     public void CameraReset()
     {
