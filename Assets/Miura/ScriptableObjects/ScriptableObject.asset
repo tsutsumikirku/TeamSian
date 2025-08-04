@@ -12,3 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4db2a9998f435941a7047edb43f1bf5, type: 3}
   m_Name: ScriptableObject
   m_EditorClassIdentifier: 
+  HogeString:
+  - Tomato
+  - Tomato
+  - Tomato
+  PerhapsFoodScore: 3
