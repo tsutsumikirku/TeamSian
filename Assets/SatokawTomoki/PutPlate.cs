@@ -81,6 +81,7 @@ public class PutPlate : MonoBehaviour
         }
         _itemList.Clear();
         plateObject.AddComponent<PlateCollider>();  
+        FindAnyObjectByType<CameraWork>().CameraReset();
 
     }
     public void Put(GameObject prefab, Sprite image)

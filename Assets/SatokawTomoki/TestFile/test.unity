@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 211849320}
   - component: {fileID: 211849319}
   - component: {fileID: 211849323}
+  - component: {fileID: 211849324}
   m_Layer: 0
   m_Name: Square
   m_TagString: Untagged
@@ -202,7 +203,7 @@ Rigidbody2D:
   m_Mass: 19.919302
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -213,7 +214,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!212 &211849321
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -276,7 +277,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -4.82, z: 0}
-  m_LocalScale: {x: 7.1311, y: 2.7933, z: 1}
+  m_LocalScale: {x: 4.62, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -294,8 +295,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   plateObject: {fileID: 211849318}
-  putTopPosition: -0.7
-  interval: 8
+  putTopPosition: 0
+  interval: 0
+--- !u!114 &211849324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 211849318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62724b7f75662bb44971176f2240d9cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseSpeed: 10
+  minSpeed: 1
+  boundaryX: 7.5
+  paddleWidth: 4.62
+  paddleHeight: 1
 --- !u!1 &508563580
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,6 +325,7 @@ GameObject:
   - component: {fileID: 508563583}
   - component: {fileID: 508563582}
   - component: {fileID: 508563581}
+  - component: {fileID: 508563584}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -388,6 +407,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &508563584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 508563580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d84537daf616f244880deff1dba0d3a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  other: {fileID: 211849323}
+  smoothSpeed: 5
+  yOffsetThreshold: -1
+  duration: 0.5
 --- !u!1 &561503162
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,13 +548,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   items:
-  - itemPrefab: {fileID: 4101722226959866092, guid: 6691eaf30e1b38040b678cbc8c4d8e9c, type: 3}
-    probability: 2
+  - itemPrefab: {fileID: 3892975553982469807, guid: d38da3bdbd5a723468807b4647013434, type: 3}
+    probability: 4
+  - itemPrefab: {fileID: 3892975553982469807, guid: 17180b93012322c489d51a10aed84048, type: 3}
+    probability: 3
+  - itemPrefab: {fileID: 3892975553982469807, guid: 0a59ab367fed9d643b5cf2e3c7eacfe5, type: 3}
+    probability: 1
+  - itemPrefab: {fileID: 3892975553982469807, guid: 5b17e55348063e9448020da6fef72485, type: 3}
+    probability: 3
+  - itemPrefab: {fileID: 3892975553982469807, guid: 31f99707e12f13c45931a6cc349434f9, type: 3}
+    probability: 4
+  - itemPrefab: {fileID: 3892975553982469807, guid: 082aeef6aa0cdb544897a66cf0a5ca7d, type: 3}
+    probability: 3
+  - itemPrefab: {fileID: 3892975553982469807, guid: 475386946ea58754f979799a821cf842, type: 3}
+    probability: 3
+  - itemPrefab: {fileID: 3892975553982469807, guid: 61e89208a11a1a04c9b1d23190f8dc16, type: 3}
+    probability: 3
   downSpeed: 10
-  intervalMini: 1
-  intervalMax: 1
+  intervalMini: 0.5
+  intervalMax: 0.5
   width: 7
   height: 13
+  cameraObject: {fileID: 508563580}
 --- !u!4 &1564914652
 Transform:
   m_ObjectHideFlags: 0
@@ -548,9 +598,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   addItems:
-  - accumulationCount: 5
-    itemPrefab: {fileID: 4101722226959866092, guid: ca41b76eb8c84d640bfee54c20869e79, type: 3}
-    probability: 100
+  - itemPrefab: {fileID: 3892975553982469807, guid: 6be64f5e78323a94994af371f686660b, type: 3}
+    probability: 4
+    accumulationCount: 5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
