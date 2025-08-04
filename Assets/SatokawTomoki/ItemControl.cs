@@ -6,11 +6,6 @@ public class ItemControl : MonoBehaviour
 {
     //アイテム個々につけるスクリプト
     [HideInInspector]public float moveSpeed = 0f;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
