@@ -5,36 +5,38 @@ using UnityEngine;
 public class ScoreManager : MonoBehaviour
 {
     //おそらくシナジー条件を複数に保存している
-    [SerializeField] ScripableObjectHoge[] ScripableObjectHoge;
+    [SerializeField] ScripableObjectHoge[] ScripableObjects;
+
     //中身　→　[スクリプタブルオブジェクト数][レシピ（全パターン）][具材]
     List<string[][]> AllScriptableObjects = new List<string[][]>();
     //ランキングスコアをリストで保存する
     List<int> _RankingScore = new List<int>();
     int TotalScore = 0;
 
+
     private void Start()
     {
         //iはレシピの順番
-        for (int i = 0; i < ScripableObjectHoge.Length; i++)
+        for (int i = 0; i < ScripableObjects.Length; i++)
         {
             //シナジー効果順不同配列
             //例：（トマト、肉、チーズ）＝＝（肉、チーズ、トマト）
-            string[][] synergyConditions = new string[ScripableObjectHoge[i].SynergyConditions.Count][];
+            string[][] synergyConditions = new string[ScripableObjects[i].SynergyConditions.Count][];
 
-            for (int j = 0; j < ScripableObjectHoge[i].SynergyConditions.Count; j++)
+            for (int j = 0; j < ScripableObjects[i].SynergyConditions.Count; j++)
             {
                 //（シナジーに必要な具材の数 × シナジーに必要な具材の数）という配列が作れる
-                synergyConditions[j] = new string[ScripableObjectHoge[i].SynergyConditions.Count];
+                synergyConditions[j] = new string[ScripableObjects[i].SynergyConditions.Count];
                 int a = 1;
                 int ja = j;
-                for (int k = 0; k < ScripableObjectHoge[i].SynergyConditions.Count; k++)
+                for (int k = 0; k < ScripableObjects[i].SynergyConditions.Count; k++)
                 {
                     ja += a;//(初期化された後は1ずつ上昇しなければならない)
-                    if (ja >= ScripableObjectHoge[i].SynergyConditions.Count)
+                    if (ja >= ScripableObjects[i].SynergyConditions.Count)
                     {
                         ja = 0;
                     }
-                    synergyConditions[j][k] = ScripableObjectHoge[i].SynergyConditions[ja];
+                    synergyConditions[j][k] = ScripableObjects[i].SynergyConditions[ja];
                 }
             }
             AllScriptableObjects.Add(synergyConditions);//二次元配列を追加する必要あり
@@ -75,11 +77,48 @@ public class ScoreManager : MonoBehaviour
     /// <param name="foods"></param>
     public void ScoreCount(List<Food> foods)
     {
-        for (int i = 0; i < foods.Count; i++)
+        //初期化
+        List<Queue<ScripableObjectHoge>> synergyList = new List<Queue<ScripableObjectHoge>>();
+        List<Queue<Food>> givenBurgers = new List<Queue<Food>>();
+        for (int i = 0; i < ScripableObjects.Length; i++)//レシピ数
         {
-            int foodScore = foods[i].Score;
-            string foodName = foods[i].Name;
+            synergyList[i] = new Queue<ScripableObjectHoge>();
+            for (int j = 0; j < ScripableObjects.Length; j++)
+            {
+                synergyList[i].Enqueue(ScripableObjects[j]);//List.Count == ScripableObjects.Length
+            }
         }
+        for (int i = 0; i < ScripableObjects.Length; i++)//レシピ数
+        {
+            givenBurgers[i] = new Queue<Food>();
+            for (int j = 0; j < foods.Count; j++)
+            {
+                givenBurgers[i].Enqueue(foods[j]);//givenBurgers.Count == ScripableObjects.Length
+            }
+        }
+        //全パターンシナジー条件が割り出されている前提で
+        //ここで具材のスコア足し算をぜんぶ試みてみる
+        //やるべきこと
+        ///・givenBurgersに
+        ///・
+        for (int i = 0; i < ScripableObjects.Length; i++)//具材の種類
+        {
+            ScripableObjectHoge successConditions = new ScripableObjectHoge();
+            for (int j = 0; j < foods.Count; j++)//全パターンの条件を検索するのに必要
+            {
+                successConditions = JudgmentSuccessConditions();
+            }
+            int synergyScore = 0;
+            
+            synergyScore = successConditions.SynergyScore;
+            TotalScore += GetCalculateGivenScore(synergyScore, foods[i].Score);
+        }
+    }
+    ScripableObjectHoge JudgmentSuccessConditions()
+    {
+
+        ScripableObjectHoge successConditions = new ScripableObjectHoge();
+        return successConditions;
     }
 }
 public interface Food
