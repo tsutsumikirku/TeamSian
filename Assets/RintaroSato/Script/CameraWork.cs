@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using DG.Tweening;
 public class CameraWork : MonoBehaviour
 { 
     public PutPlate other; // インスペクタからアサイン
@@ -10,7 +10,10 @@ public class CameraWork : MonoBehaviour
     public float yOffsetThreshold = 0.5f;
 
     private Camera _camera;
-
+    public void CameraReset()
+    {
+        _camera.gameObject.transform.DOMoveY(1,1f);
+    }
     void Start()
     {
         _camera = Camera.main;
