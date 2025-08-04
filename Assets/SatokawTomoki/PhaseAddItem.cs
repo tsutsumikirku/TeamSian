@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering;
 
 public class PhaseAddItem : MonoBehaviour
 {
-    [System.Serializable] public class PhaseItem
+    [System.Serializable]
+    public class PhaseItem
     {
-        public int accumulationCount;
         public GameObject itemPrefab;
         public int probability;
+        public int accumulationCount;
     }
     public List<PhaseItem> addItems;
     private ItemDrop itemDrop;
@@ -24,20 +24,20 @@ public class PhaseAddItem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     public void AddItem(int itemCount)
     {
-        foreach(PhaseItem item in addItems)
+        foreach (PhaseItem item in addItems)
         {
-            if(item.accumulationCount > itemCount)
+            if (item.accumulationCount > itemCount)
             {
                 continue;
             }
             bool isAdded = false;
-            foreach(ItemDrop.ItemData data in itemDrop.items)
+            foreach (ItemDrop.ItemData data in itemDrop.items)
             {
-                if(data.itemPrefab == item.itemPrefab)
+                if (data.itemPrefab == item.itemPrefab)
                 {
                     isAdded = true;
                     break;

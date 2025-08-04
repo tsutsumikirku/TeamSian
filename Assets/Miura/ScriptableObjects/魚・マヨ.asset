@@ -10,10 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e4db2a9998f435941a7047edb43f1bf5, type: 3}
-  m_Name: ScriptableObject
+  m_Name: "\u9B5A\u30FB\u30DE\u30E8"
   m_EditorClassIdentifier: 
-  HogeString:
-  - Tomato
-  - Tomato
-  - Tomato
-  PerhapsFoodScore: 3
+  SynergyConditions:
+  - "\u9B5A"
+  - "\u30DE\u30E8"
+  SynergyScore: 0
