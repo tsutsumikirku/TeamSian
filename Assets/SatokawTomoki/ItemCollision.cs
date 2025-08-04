@@ -20,5 +20,5 @@ public class ItemCollision : MonoBehaviour
 }
 public interface IDish
 {
-    public void Get(GameObject prefab,Sprite image = null);
+    public void Get(GameObject prefab, Sprite image = null);
 }

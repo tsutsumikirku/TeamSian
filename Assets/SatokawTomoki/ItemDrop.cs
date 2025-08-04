@@ -24,7 +24,7 @@ public class ItemDrop : MonoBehaviour
     void Start()
     {
         intervalTime = 1f;
-        
+
     }
 
     // Update is called once per frame
@@ -67,17 +67,17 @@ public class ItemDrop : MonoBehaviour
         int iNum = Random.Range(1, probabilityTotal + 1);
         int total = 0;
         ItemData data = null;
-        foreach(ItemData item in items)
+        foreach (ItemData item in items)
         {
-            
-            if(total < iNum && total + item.probability >= iNum)
+
+            if (total < iNum && total + item.probability >= iNum)
             {
                 data = item;
                 break;
             }
             total += item.probability;
         }
-        if(data == null)
+        if (data == null)
         {
             Debug.LogError("ItemData Null");
         }
