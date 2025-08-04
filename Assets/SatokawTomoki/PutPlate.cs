@@ -7,7 +7,11 @@ public class PutPlate : MonoBehaviour, IDish
     [SerializeField][Header("お皿のオブジェクト")] private GameObject plateObject;
     [SerializeField][Header("最初の高さ")] private float putTopPosition;
     [SerializeField][Header("オブジェクトの間")] private float interval;
-    private List<GameObject> itemList = new List<GameObject>();
+    private List<GameObject> _itemList = new List<GameObject>();
+    public List<GameObject> itemList
+    {
+        get { return _itemList; }
+    }
 
     public void Get(GameObject prefab, Sprite image)
     {
@@ -23,7 +27,7 @@ public class PutPlate : MonoBehaviour, IDish
         Vector3 position = Vector3.zero;
         position.x = 0;
         float positionY = putTopPosition;
-        foreach (GameObject item in itemList)
+        foreach (GameObject item in _itemList)
         {
             positionY += GetComponent<SpriteRenderer>().bounds.size.y /interval;
         }
@@ -36,7 +40,8 @@ public class PutPlate : MonoBehaviour, IDish
         newObject.transform.parent = plateObject.transform;
         newObject.transform.localPosition = position;
         newObject.GetComponent<Collider2D>().isTrigger = true;
-        itemList.Add( newObject );
+        _itemList.Add( newObject );
+        FindAnyObjectByType<PhaseAddItem>().AddItem(_itemList.Count);
     }
 
     // Start is called before the first frame update

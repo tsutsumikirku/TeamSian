@@ -101,6 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: "\u30A2\u30A4\u30C6\u30E0"
   itemPrefab: {fileID: 4101722226959866092}
+  itemImage: {fileID: 0}
 --- !u!58 &2770180400905502829
 CircleCollider2D:
   m_ObjectHideFlags: 0

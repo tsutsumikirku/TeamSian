@@ -290,9 +290,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 211849318}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 601d3ae29c21b12498bb54b7a14c632d, type: 3}
+  m_Script: {fileID: 11500000, guid: 519e9edf2f9e7db4eae671fd838c2a97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  plateObject: {fileID: 211849318}
+  putTopPosition: -0.7
+  interval: 8
 --- !u!1 &508563580
 GameObject:
   m_ObjectHideFlags: 0
@@ -489,6 +492,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1564914652}
   - component: {fileID: 1564914651}
+  - component: {fileID: 1564914653}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -511,8 +515,6 @@ MonoBehaviour:
   items:
   - itemPrefab: {fileID: 4101722226959866092, guid: 6691eaf30e1b38040b678cbc8c4d8e9c, type: 3}
     probability: 2
-  - itemPrefab: {fileID: 4101722226959866092, guid: ca41b76eb8c84d640bfee54c20869e79, type: 3}
-    probability: 1
   downSpeed: 10
   intervalMini: 1
   intervalMax: 1
@@ -533,6 +535,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1564914653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1564914650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7967cb45f419eb941a554047a37e2c54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addItems:
+  - accumulationCount: 5
+    itemPrefab: {fileID: 4101722226959866092, guid: ca41b76eb8c84d640bfee54c20869e79, type: 3}
+    probability: 100
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
