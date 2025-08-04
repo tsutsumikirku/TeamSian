@@ -49,7 +49,7 @@ public class PutPlate : MonoBehaviour
 
         foreach (GameObject item in _itemList)
         {
-            SpriteRenderer sr = item.GetComponent<SpriteRenderer>();
+            Collider2D sr = item.GetComponent<Collider2D>();
             if (sr != null)
             {
                 positionY += sr.bounds.size.y + interval;
@@ -76,6 +76,7 @@ public class PutPlate : MonoBehaviour
         if (plateObject.GetComponent<PlateCollider>() != null)
         {
             Destroy(plateObject.GetComponent<PlateCollider>());
+            plateObject.GetComponent<Collider2D>().isTrigger = true;
         }
         foreach (GameObject item in _itemList)
         {
