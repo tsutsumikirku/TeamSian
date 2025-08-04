@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ItemCollision : MonoBehaviour
 {
-    [SerializeField][Header("アイテムの名前")]  private string itemName;
+    [SerializeField][Header("アイテムの名前")]  public string itemName;
     [SerializeField][Header("アイテムのプレハブ")] private GameObject itemPrefab;
     [SerializeField] private Sprite itemImage;
     public void OnCollisionEnter2D(Collision2D collision)
