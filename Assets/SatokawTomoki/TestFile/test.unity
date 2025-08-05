@@ -1280,7 +1280,7 @@ MonoBehaviour:
     probability: 4
   - itemPrefab: {fileID: 3892975553982469807, guid: 17180b93012322c489d51a10aed84048, type: 3}
     probability: 3
-  - itemPrefab: {fileID: 3892975553982469807, guid: 0a59ab367fed9d643b5cf2e3c7eacfe5, type: 3}
+  - itemPrefab: {fileID: 3892975553982469807, guid: b4c74a9707542c744800090fe2d8fdce, type: 3}
     probability: 1
   - itemPrefab: {fileID: 3892975553982469807, guid: 5b17e55348063e9448020da6fef72485, type: 3}
     probability: 3
