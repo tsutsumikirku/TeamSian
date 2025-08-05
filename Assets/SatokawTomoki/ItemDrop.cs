@@ -22,6 +22,7 @@ public class ItemDrop : MonoBehaviour
     private float timer = 0f;
     private float intervalTime;
     private int probabilityTotal;
+    private int clonedCount = 1;
     bool isStart;
     // Start is called before the first frame update
     void Start()
@@ -67,8 +68,8 @@ public class ItemDrop : MonoBehaviour
         dropItems.Add(newItem);
         newItem.transform.position = clonePosition;
         newItem.AddComponent<ItemControl>().moveSpeed = downSpeed;
-
-
+        newItem.GetComponent<SpriteRenderer>().sortingOrder = clonedCount;
+        clonedCount++;
         ////rigbody�̊m�F
         //Rigidbody2D newItemRb =newItem.GetComponent<Rigidbody2D>();
         //if(newItemRb != null )
