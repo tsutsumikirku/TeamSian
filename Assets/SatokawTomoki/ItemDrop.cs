@@ -13,8 +13,8 @@ public class ItemDrop : MonoBehaviour
     }
     [SerializeField][Header("アイテムリスト")] public List<ItemData> items;
     [SerializeField][Header("落下スピード")] private float downSpeed = 10f;
-    [SerializeField][Header("アイテム出現間隔(秒)最小値")] private float intervalMini;
-    [SerializeField][Header("アイテム出現間隔 最大値")] private float intervalMax;
+    [SerializeField][Header("アイテム出現間隔(秒)最小値")] public float intervalMini;
+    [SerializeField][Header("アイテム出現間隔 最大値")] public float intervalMax;
     [SerializeField][Header("アイテム出現範囲 横幅")] private float width;
     [SerializeField][Header("アイテム出現範囲 高さ")] private float height;
     [SerializeField] private GameObject cameraObject;

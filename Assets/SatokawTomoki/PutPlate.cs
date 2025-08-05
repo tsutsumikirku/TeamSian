@@ -106,6 +106,7 @@ public class PutPlate : MonoBehaviour
         _itemList.Add(newObject);
 
         FindAnyObjectByType<PhaseAddItem>()?.AddItem();
+        FindAnyObjectByType<ItemIntervalChange>()?.ItemCountChange();
 
         // Collider初期設定
         Collider2D col = newObject.GetComponent<Collider2D>();
