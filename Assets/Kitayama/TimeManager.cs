@@ -6,9 +6,10 @@ using UnityEngine;
 public class TimeManager : MonoBehaviour
 {
     public Action OnEnd;
-    //Žc‚èŽžŠÔ
+    public Action<int> OnUpdate;
+    //ï¿½cï¿½èŽžï¿½ï¿½
     private float timeRemaining;
-    //ŽžŠÔ‚ª“®‚¢‚Ä‚¢‚é‚©‚Ç‚¤‚©
+    //ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½
     private bool isTimeRunning = false;
 
 
@@ -25,11 +26,13 @@ public class TimeManager : MonoBehaviour
         if (!isTimeRunning) return;
 
         timeRemaining -= Time.deltaTime;
+        OnUpdate?.Invoke((int)timeRemaining);
 
-        if (timeRemaining <= 0f) {
-            Debug.Log("ŽžŠÔØ‚êI");
+        if (timeRemaining <= 0f)
+        {
+            Debug.Log("ï¿½ï¿½ï¿½ÔØ‚ï¿½I");
 
-            //‚Ò‚Á‚½‚è‚O‚É‚·‚é
+            //ï¿½Ò‚ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½É‚ï¿½ï¿½ï¿½
             timeRemaining = 0f;
             isTimeRunning = false;
             OnEnd?.Invoke();

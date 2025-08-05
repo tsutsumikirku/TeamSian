@@ -1,128 +1,83 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ScoreManager : MonoBehaviour
 {
-    //‚¨‚»‚ç‚­ƒVƒiƒW[ğŒ‚ğ•¡”‚É•Û‘¶‚µ‚Ä‚¢‚é
+    // ã‚·ãƒŠã‚¸ãƒ¼æƒ…å ±ã‚’ScriptableObjectã§ç®¡ç†ã—ã¦ã„ã‚‹
     [SerializeField] ScripableObjectHoge[] ScripableObjects;
-
-    //’†g@¨@[ƒXƒNƒŠƒvƒ^ƒuƒ‹ƒIƒuƒWƒFƒNƒg”][ƒŒƒVƒsi‘Sƒpƒ^[ƒ“j][‹ïŞ]
-    List<string[][]> AllScriptableObjects = new List<string[][]>();
-    //ƒ‰ƒ“ƒLƒ“ƒOƒXƒRƒA‚ğƒŠƒXƒg‚Å•Û‘¶‚·‚é
-    List<int> _RankingScore = new List<int>();
+    [SerializeField] GameObject scoreText; // ã‚¹ã‚³ã‚¢è¡¨ç¤ºç”¨ã®UIã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+    [SerializeField] GameObject comboPanel; // ã‚¹ã‚³ã‚¢ãƒ‘ãƒãƒ«ã®è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+    private GameObject conboText;
+    public Action<int> OnScoreUp;
     int TotalScore = 0;
-
-    //private void Start()
-    //{
-    //    //i‚ÍƒŒƒVƒs‚Ì‡”Ô
-    //    for (int i = 0; i < ScripableObjects.Length; i++)
-    //    {
-    //        //ƒVƒiƒW[Œø‰Ê‡•s“¯”z—ñ
-    //        //—áFiƒgƒ}ƒgA“÷Aƒ`[ƒYji“÷Aƒ`[ƒYAƒgƒ}ƒgj
-    //        string[][] synergyConditions = new string[ScripableObjects[i].SynergyConditions.Count][];
-
-    //        for (int j = 0; j < ScripableObjects[i].SynergyConditions.Count; j++)
-    //        {
-    //            //iƒVƒiƒW[‚É•K—v‚È‹ïŞ‚Ì” ~ ƒVƒiƒW[‚É•K—v‚È‹ïŞ‚Ì”j‚Æ‚¢‚¤”z—ñ‚ªì‚ê‚é
-    //            synergyConditions[j] = new string[ScripableObjects[i].SynergyConditions.Count];
-    //            int a = 1;
-    //            int ja = j;
-    //            for (int k = 0; k < ScripableObjects[i].SynergyConditions.Count; k++)
-    //            {
-    //                ja += a;//(‰Šú‰»‚³‚ê‚½Œã‚Í1‚¸‚Âã¸‚µ‚È‚¯‚ê‚Î‚È‚ç‚È‚¢)
-    //                if (ja >= ScripableObjects[i].SynergyConditions.Count)
-    //                {
-    //                    ja = 0;
-    //                }
-    //                synergyConditions[j][k] = ScripableObjects[i].SynergyConditions[ja];
-    //            }
-    //        }
-    //        AllScriptableObjects.Add(synergyConditions);//“ñŸŒ³”z—ñ‚ğ’Ç‰Á‚·‚é•K—v‚ ‚è
-    //    }
-
-    //    for (int i = 0; i < AllScriptableObjects.Count; i++)
-    //    {
-    //        for (int j = 0; j < AllScriptableObjects[i].Length; j++)
-    //        {
-    //            for (int k = 0; k < AllScriptableObjects[i][j].Length; k++)
-    //            {
-    //                Debug.Log($"ƒŒƒVƒs{i}‚Ì{j}”Ô–Ú‚Ì•\‚Ì{k}”Ô–Ú‚Ì‹ïŞ‚Í{AllScriptableObjects[i][j][k]}");
-    //            }
-    //        }
-    //    }
-    //}
-    /// <summary>
-    /// ƒVƒiƒW[ƒXƒRƒA‚Æ‹ïŞ‚ÌƒXƒRƒA‚ğˆø”‚É“n‚·‚ÆA‘«‚µ‚½’l‚ª•Ô‚Á‚Ä‚­‚éB
-    /// </summary>
-    /// <param name="synergyScore"></param>
-    /// <param name="foodScore"></param>
-    /// <returns></returns>
-    public int GetCalculateGivenScore(int synergyScore, int foodScore)
+    public void ScoreCount(List<IFood> foods)
     {
-        return synergyScore + foodScore;
-    }
-    /// <summary>
-    /// ƒnƒ“ƒo[ƒK[1ŒÂ•ª‚ÌƒXƒRƒA‚ğŒvZ‚·‚é
-    /// </summary>
-    /// <param name="foods"></param>
-    public void ScoreCount(List<Food> foods)
-    {
-        //‰Šú‰»EŒvZ‚É‰e‹¿‚Í‚È‚¢‚Í‚¸
-
-        //ScripableObjects‚ğV‹KƒŠƒXƒg‰»
-        List<ScripableObjectHoge> synergyList = ScripableObjects.ToList();
-
-        //ŒvZŠJnE‘SƒŒƒVƒs‚ğQÆ
-        for (int i = 0; i < synergyList.Count; i++)//ƒŒƒVƒs‚Ì”
+        List<Queue<string>> synergyGroups = new List<Queue<string>>();
+        for (int i = 0; i < ScripableObjects.Length; i++)
         {
-            int synergyScore = 0;
-            int successConditionsScore = 0;
-
-            successConditionsScore = JudgmentSuccessConditionsScore(synergyList[i], foods);
-            synergyScore = successConditionsScore;
-            TotalScore += GetCalculateGivenScore(synergyScore, foods[i].Score);
+            // ã‚·ãƒŠã‚¸ãƒ¼ã®åå‰ã‚’ã‚­ãƒ¥ãƒ¼ã«è¿½åŠ 
+            Queue<string> synergyQueue = new Queue<string>();
+            synergyGroups.Add(synergyQueue);
         }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="synergyList"></param>
-    /// <param name="givenBurgers"></param>
-    /// <returns></returns>
-    int JudgmentSuccessConditionsScore(ScripableObjectHoge synergyList, List<Food> givenBurgers)//ğŒ‚Íˆê“x‚µ‚©‚³‚ê‚È‚¢EFood‚Í•¡»‚³‚ê‚½Queue‚Ì’†‚©‚ç‚Ğ‚Æ‚Â‚¾‚¯‚³‚ê‚é
-    {
-        int successConditionsScore = 0;
-        List<string> SynergyConditions = synergyList.SynergyConditions; //ƒŒƒVƒsˆê‚Â•ªistring‚ÌƒRƒŒƒNƒVƒ‡ƒ“j
-        Queue<string> seachStringQueue = new Queue<string>();
-        for (int i = 0; i < givenBurgers.Count; i++)//‹ïŞ‚Ìí—Ş‚Ô‚ñŒJ‚è•Ô‚·
+        foreach (var food in foods)
         {
-            seachStringQueue.Enqueue(givenBurgers[i].Name);
-            if (seachStringQueue.Count > SynergyConditions.Count)
+            TotalScore += food.Score;
+            for (int i = 0; i < ScripableObjects.Length; i++)
             {
-                seachStringQueue.Dequeue();
-            }
-            string[] searchString = seachStringQueue.ToArray();
-            bool isSuccess = true;
-            for (int j = 0; j < synergyList.SynergyConditions.Count; j ++)//ƒŒƒVƒs‚Ì’†‚É‚ ‚é—v‘f”‚¾‚¯ŒJ‚è•Ô‚·
-            {
-                if (SynergyConditions[j] != searchString[j])
+                //ã‚‚ã—ã‚·ãƒŠã‚¸ãƒ¼æ¡ä»¶ã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹ã‚­ãƒ¥ãƒ¼ã®è¦ç´ æ•°ãŒã‚³ãƒ³ãƒ‡ã‚£ã‚·ãƒ§ãƒ³ã®æ•°ã¨ä¸€è‡´ã—ãŸã‚‰Dequeueã™ã‚‹
+                if (synergyGroups[i].Count == ScripableObjects[i].SynergyConditions.Count)
                 {
-                    isSuccess = false;
+                    synergyGroups[i].Dequeue();
+                }
+                synergyGroups[i].Enqueue(food.Name);
+                // ã‚·ãƒŠã‚¸ãƒ¼æ¡ä»¶ã«ä¸€è‡´ã™ã‚‹ã‹ãƒã‚§ãƒƒã‚¯
+                if (ScripableObjects[i].SynergyConditions.All(condition => synergyGroups[i].Contains(condition)))
+                {
+                    TotalScore += ScripableObjects[i].SynergyScore;
+                    synergyGroups[i].Dequeue(); // ä¸€è‡´ã—ãŸæ¡ä»¶ã‚’ã‚­ãƒ¥ãƒ¼ã‹ã‚‰å‰Šé™¤
                 }
             }
-            if (isSuccess)
+        }
+        OnScoreUp?.Invoke(TotalScore);
+    }
+    public bool ComboChack(List<IFood> foods)
+    {
+        List<Queue<string>> synergyGroups = new List<Queue<string>>();
+        for (int i = 0; i < ScripableObjects.Length; i++)
+        {
+            // ã‚·ãƒŠã‚¸ãƒ¼ã®åå‰ã‚’ã‚­ãƒ¥ãƒ¼ã«è¿½åŠ 
+            Queue<string> synergyQueue = new Queue<string>();
+            synergyGroups.Add(synergyQueue);
+        }
+        for (int j = foods.Count - 1; j >= 0; j--)
+        {
+            var food = foods[j];
+            for (int i = 0; i < ScripableObjects.Length; i++)
             {
-                successConditionsScore = synergyList.SynergyScore;
+                //ã‚‚ã—ã‚·ãƒŠã‚¸ãƒ¼æ¡ä»¶ã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹ã‚­ãƒ¥ãƒ¼ã®è¦ç´ æ•°ãŒã‚³ãƒ³ãƒ‡ã‚£ã‚·ãƒ§ãƒ³ã®æ•°ã¨ä¸€è‡´ã—ãŸã‚‰Dequeueã™ã‚‹
+                if (synergyGroups[i].Count == ScripableObjects[i].SynergyConditions.Count)
+                {
+                    synergyGroups[i].Dequeue();
+                }
+                synergyGroups[i].Enqueue(food.Name);
+                // ã‚·ãƒŠã‚¸ãƒ¼æ¡ä»¶ã«ä¸€è‡´ã™ã‚‹ã‹ãƒã‚§ãƒƒã‚¯
+                if (ScripableObjects[i].SynergyConditions.All(condition => synergyGroups[i].Contains(condition)))
+                {
+                    synergyGroups[i].Dequeue(); // ä¸€è‡´ã—ãŸæ¡ä»¶ã‚’ã‚­ãƒ¥ãƒ¼ã‹ã‚‰å‰Šé™¤
+                    Debug.LogError($"Combo Achieved: {ScripableObjects[i].Name} with score {ScripableObjects[i].SynergyScore}");
+                    return true; // ä¸€è‡´ã—ãŸã‚‰ã“ã“ã§çµ‚äº†
+                }
             }
         }
-        return successConditionsScore;
+        return false; // ä¸€è‡´ã—ãªã‹ã£ãŸå ´åˆ
     }
 }
-public interface Food
+public interface IFood
 {
     public int Score { get; }
     public string Name { get; }
+    public Vector2 Transform { get; }
 }

@@ -7,16 +7,15 @@ public class Paddle : MonoBehaviour
 {
     private Rigidbody2D paddleRb;
 
-    [Header("ˆÚ“®İ’è")]
+    [Header("ï¿½Ú“ï¿½ï¿½İ’ï¿½")]
     public float baseSpeed = 10f;
     public float minSpeed = 1f;
     public float boundaryX = 7.5f;
 
-    [Header("ƒTƒCƒYİ’è")]
-    [Tooltip("ƒpƒhƒ‹‚Ì‰¡•iƒ[ƒJƒ‹ƒXƒP[ƒ‹‚ÌX‚É”½‰f‚³‚ê‚éj")]
+    [Header("ï¿½Tï¿½Cï¿½Yï¿½İ’ï¿½")]
+    [Tooltip("ï¿½pï¿½hï¿½ï¿½ï¿½Ì‰ï¿½ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½[ï¿½Jï¿½ï¿½ï¿½Xï¿½Pï¿½[ï¿½ï¿½ï¿½ï¿½Xï¿½É”ï¿½ï¿½fï¿½ï¿½ï¿½ï¿½ï¿½j")]
     public float paddleWidth = 2f;
 
-    [Tooltip("Height ‚Í•Û‚³‚ê‚éB•K—v‚È‚ç•Ê“rŒöŠJ‚µ‚Ä’²®‰Â”\‚É‚µ‚Ä‚­‚¾‚³‚¢B")]
     public float paddleHeight = 1f;
 
     private float input;
@@ -36,7 +35,7 @@ public class Paddle : MonoBehaviour
 
     void OnValidate()
     {
-        // ƒCƒ“ƒXƒyƒNƒ^[‚Å’l‚ğ•Ï‚¦‚½‚Æ‚«‚É‘¦À‚É”½‰f
+        // ï¿½Cï¿½ï¿½ï¿½Xï¿½yï¿½Nï¿½^ï¿½[ï¿½Å’lï¿½ï¿½Ï‚ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½É‘ï¿½ï¿½ï¿½ï¿½É”ï¿½ï¿½f
         ApplySize();
     }
 
@@ -63,18 +62,18 @@ public class Paddle : MonoBehaviour
 
     private void ApplySize()
     {
-        // ƒpƒhƒ‹‚ÌƒXƒP[ƒ‹‚ğ‰¡•‚Æ‚‚³‚É‡‚í‚¹‚éiZ‚Í‚»‚Ì‚Ü‚Üj
+        // ï¿½pï¿½hï¿½ï¿½ï¿½ÌƒXï¿½Pï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æï¿½ï¿½ï¿½ï¿½Éï¿½ï¿½í‚¹ï¿½ï¿½iZï¿½Í‚ï¿½ï¿½Ì‚Ü‚Üj
         Vector3 localScale = transform.localScale;
         localScale.x = paddleWidth;
         localScale.y = paddleHeight;
         transform.localScale = localScale;
 
-        // ‚à‚µ BoxCollider2D ‚ª‚ ‚ê‚ÎƒTƒCƒY‚ğ‡‚í‚¹‚éiƒXƒP[ƒ‹‚Æ‚Í•Ê‚Éİ’è‚³‚ê‚Ä‚¢‚éê‡j
+        // ï¿½ï¿½ï¿½ï¿½ BoxCollider2D ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÎƒTï¿½Cï¿½Yï¿½ï¿½ï¿½ï¿½ï¿½í‚¹ï¿½ï¿½iï¿½Xï¿½Pï¿½[ï¿½ï¿½ï¿½Æ‚Í•Ê‚Éİ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡ï¿½j
         BoxCollider2D box = GetComponent<BoxCollider2D>();
         if (box != null)
         {
-            // Šî–{“I‚ÉƒTƒCƒY‚ğ 1,1 ‚Ìó‘Ô‚©‚ç‚Ì”ä—¦‚Å‡‚í‚¹‚½‚¢‚È‚çˆÈ‰º‚ğ’²®
-            box.size = new Vector2(1f, 1f); // ‚à‚µ collider ©‘Ì‚ÌƒTƒCƒY‚ğ”CˆÓ‚É‚µ‚½‚¯‚ê‚Î•ÊƒvƒƒpƒeƒB‰»
+            // ï¿½ï¿½{ï¿½Iï¿½ÉƒTï¿½Cï¿½Yï¿½ï¿½ 1,1 ï¿½Ìï¿½Ô‚ï¿½ï¿½ï¿½Ì”ä—¦ï¿½Åï¿½ï¿½í‚¹ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½È‰ï¿½ï¿½ğ’²ï¿½
+            box.size = new Vector2(1f, 1f); // ï¿½ï¿½ï¿½ï¿½ collider ï¿½ï¿½ï¿½Ì‚ÌƒTï¿½Cï¿½Yï¿½ï¿½Cï¿½Ó‚É‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î•Êƒvï¿½ï¿½ï¿½pï¿½eï¿½Bï¿½ï¿½
         }
     }
 }

@@ -2,17 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemCollision : MonoBehaviour
+public class ItemCollision : MonoBehaviour, IFood
 {
-    [SerializeField][Header("ƒAƒCƒeƒ€‚Ì–¼‘O")]  public string itemName;
-    [SerializeField][Header("ƒAƒCƒeƒ€‚ÌƒvƒŒƒnƒu")] private GameObject itemPrefab;
+    [SerializeField][Header("ï¿½Aï¿½Cï¿½eï¿½ï¿½ï¿½Ì–ï¿½ï¿½O")]  public string itemName;
+    [SerializeField][Header("ï¿½Aï¿½Cï¿½eï¿½ï¿½ï¿½Ì–ï¿½ï¿½O")]  public int itemScore;
+    [SerializeField][Header("ï¿½Aï¿½Cï¿½eï¿½ï¿½ï¿½Ìƒvï¿½ï¿½ï¿½nï¿½u")] private GameObject itemPrefab;
     [SerializeField] private Sprite itemImage;
+
+    public int Score => itemScore;
+
+    public string Name => itemName;
+    
+    public Vector2 Transform => transform.position;
+
     public void OnCollisionEnter2D(Collision2D collision)
     {
         GameObject hitObject = collision.gameObject;
         if (hitObject.GetComponent<IDish>() != null)
         {
-            hitObject.GetComponent<IDish>().Get(itemPrefab,itemImage);
+            hitObject.GetComponent<IDish>().Get(itemPrefab, itemImage);
             Destroy(this.gameObject);
         }
     }

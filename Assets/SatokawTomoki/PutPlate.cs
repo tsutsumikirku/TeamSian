@@ -2,24 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.SocialPlatforms.Impl;
 public class PutPlate : MonoBehaviour
 {
-    [SerializeField][Header("‚¨M‚ÌƒIƒuƒWƒFƒNƒg")] private GameObject plateObject;
-    [SerializeField][Header("Å‰‚Ì‚‚³iPlate‚Ìã’[‚È‚Çj")] private float putTopPosition = 0f;
-    [SerializeField][Header("ƒIƒuƒWƒFƒNƒgŠÔ‚ÌŠÔŠu")] private float interval = 0.05f;
+    [SerializeField][Header("çš¿ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ")] private GameObject _plateObject;
+    [SerializeField][Header("æœ€ä¸Šéƒ¨ã®ä½ç½®ï¼ˆPlateã®åº§æ¨™åŸºæº–ï¼‰")] private float _putTopPosition = 0f;
+    [SerializeField][Header("ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé–“ã®é–“éš”")] private float _interval = 0.05f;
+    [SerializeField][Header("ScoreManagerã®å‚ç…§")] private ScoreManager _scoreManager;
 
     private List<GameObject> _itemList = new List<GameObject>();
     public List<GameObject> itemList => _itemList;
 
     public void Start()
     {
-        plateObject.AddComponent<PlateCollider>();
+        _plateObject.AddComponent<PlateCollider>();
     }
 
     public void Update()
     {
-        // ƒIƒuƒWƒFƒNƒg‚ğ‡‚ÉÏ‚İ’¼‚·iƒYƒŒ‘Îôj
-        float positionY = putTopPosition;
+        // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é †ã«ç©ã¿ä¸Šã’ã‚‹ï¼ˆYåº§æ¨™è¨ˆç®—ï¼‰
+        float positionY = _putTopPosition;
 
         for (int i = 0; i < _itemList.Count; i++)
         {
@@ -27,10 +29,10 @@ public class PutPlate : MonoBehaviour
             Collider2D col = obj.GetComponent<Collider2D>();
             if (col != null)
             {
-                // ‚‚³{•â³
+                // é«˜ã•åˆ†åŠ ç®—
                 positionY += col.bounds.size.y;
                 positionY -= col.offset.y;
-                positionY += interval;
+                positionY += _interval;
             }
 
             Collider2D newCol = obj.GetComponent<Collider2D>();
@@ -45,7 +47,7 @@ public class PutPlate : MonoBehaviour
                 obj.transform.localPosition = newLocalPos;
             }
 
-            // ƒ\[ƒg‡‚àÄİ’è
+            // ã‚½ãƒ¼ãƒˆé †ã‚’è¨­å®š
             SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
             if (sr != null)
             {
@@ -53,11 +55,11 @@ public class PutPlate : MonoBehaviour
                 sr.sortingOrder = i;
             }
 
-            // ‘S‚ÄTrigger‚É‚µ‚Ä‚¨‚¢‚Äc
+            // å…¨ã¦Triggerã«ã—ã¦ãŠã
             if (col != null) col.isTrigger = true;
         }
 
-        // ÅŒã‚ÌƒIƒuƒWƒFƒNƒg‚¾‚¯ Trigger = falsei“–‚½‚è”»’èONj
+        // æœ€å¾Œã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã ã‘ Trigger = falseï¼ˆè¡çªåˆ¤å®šONï¼‰
         if (_itemList.Count > 0)
         {
             GameObject last = _itemList[_itemList.Count - 1];
@@ -75,45 +77,45 @@ public class PutPlate : MonoBehaviour
     }
     public void BurgerReset()
     {
-        foreach(GameObject obj in  _itemList)
+        foreach (GameObject obj in _itemList)
         {
             Destroy(obj);
         }
         _itemList.Clear();
-        plateObject.AddComponent<PlateCollider>();  
+        _plateObject.AddComponent<PlateCollider>();
         FindAnyObjectByType<CameraWork>().CameraReset();
 
     }
     public void Put(GameObject prefab, Sprite image)
     {
         GameObject newObject = Instantiate(prefab);
-        // •s—v‚ÈƒRƒ“ƒ|[ƒlƒ“ƒgíœ
+        // ä¸è¦ãªã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆå‰Šé™¤
         Destroy(newObject.GetComponent<Rigidbody>());
         Destroy(newObject.GetComponent<ItemControl>());
 
-        // ƒXƒvƒ‰ƒCƒgİ’è
+        // ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆè¨­å®š
         SpriteRenderer sr = newObject.GetComponent<SpriteRenderer>();
         if (image != null && sr != null)
         {
             sr.sprite = image;
         }
 
-        // eİ’è‚Æ‰ŠúˆÊ’uiY‚ÍUpdate‚ÅÄŒvZ‚·‚é‚Ì‚Å‰¼’u‚«j
-        newObject.transform.SetParent(plateObject.transform);
+        // è¦ªè¨­å®šï¼†åˆæœŸä½ç½®ï¼ˆYã¯Updateã§å†è¨ˆç®—ã•ã‚Œã‚‹ã®ã§ä»®ã§OKï¼‰
+        newObject.transform.SetParent(_plateObject.transform);
         newObject.transform.localPosition = Vector3.zero;
 
         _itemList.Add(newObject);
 
         FindAnyObjectByType<PhaseAddItem>()?.AddItem(_itemList.Count);
 
-        // Collider‰Šúİ’è
+        // CollideråˆæœŸè¨­å®š
         Collider2D col = newObject.GetComponent<Collider2D>();
         if (col != null) col.isTrigger = true;
 
-        // PlateColliderŠÇ—i‘Síœ ¨ ÅŒã‚ÉÄİ’èj
-        if (plateObject.GetComponent<PlateCollider>() != null)
+        // PlateColliderç®¡ç†ï¼ˆå…¨å‰Šé™¤ â†’ æœ€å¾Œã«ã ã‘ä»˜ä¸ï¼‰
+        if (_plateObject.GetComponent<PlateCollider>() != null)
         {
-            Destroy(plateObject.GetComponent<PlateCollider>());
+            Destroy(_plateObject.GetComponent<PlateCollider>());
         }
 
         foreach (GameObject item in _itemList)
@@ -121,12 +123,34 @@ public class PutPlate : MonoBehaviour
             Destroy(item.GetComponent<PlateCollider>());
         }
 
-        // ¦ˆÊ’u‚â“–‚½‚è”»’è‚È‚Ç‚Ìˆ—‚ÍUpdate‚Å–ˆƒtƒŒ[ƒ€ÄŒv
+        // ä½ç½®æºã‚‰ã—æ¼”å‡ºã¯ã‚³ãƒ¡ãƒ³ãƒˆã‚¢ã‚¦ãƒˆ
         //plateObject.transform.DOPunchPosition(new Vector3(0, 0.5f, 0), 0.5f, 3, 1f);
+        ManualPopupUpdate();
 
-        if (prefab.GetComponent<ItemCollision>().itemName == "ƒoƒ“ƒY")
+        if (prefab.GetComponent<ItemCollision>().itemName == "ãƒãƒ³ã‚º")
         {
+            ScoreCount();
             BurgerReset();
         }
+    }
+    private void ScoreCount()
+    {
+        List<IFood> foods = new List<IFood>();
+        for (int i = 0; i < _itemList.Count; i++)
+        {
+            IFood food = _itemList[i].GetComponent<IFood>();
+            foods.Add(food);
+        }
+        _scoreManager.ScoreCount(foods);
+    }
+    private void ManualPopupUpdate()
+    {
+        List<IFood> foods = new List<IFood>();
+        for (int i = 0; i < _itemList.Count; i++)
+        {
+            IFood food = _itemList[i].GetComponent<IFood>();
+            foods.Add(food);
+        }
+        _scoreManager.ComboChack(foods);
     }
 }

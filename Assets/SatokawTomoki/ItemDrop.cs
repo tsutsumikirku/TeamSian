@@ -11,26 +11,43 @@ public class ItemDrop : MonoBehaviour
         public GameObject itemPrefab;
         public int probability;
     }
-    [SerializeField][Header("ƒAƒCƒeƒ€ƒŠƒXƒg")] public List<ItemData> items;
-    [SerializeField][Header("—‚¿‚éƒXƒs[ƒh")] private float downSpeed = 10f;
-    [SerializeField][Header("ƒAƒCƒeƒ€‚ª—‚¿‚é•p“x(•b)Å¬’l")] private float intervalMini;
-    [SerializeField][Header("ƒAƒCƒeƒ€‚ª—‚¿‚é•p“x@Å‘å’l")] private float intervalMax;
-    [SerializeField][Header("ƒAƒCƒeƒ€‚ğ—‚Æ‚·‰¡•")] private float width;
-    [SerializeField][Header("ƒAƒCƒeƒ€‚ğ—‚Æ‚·‚‚³")] private float height;
+    [SerializeField][Header("ã‚¢ã‚¤ãƒ†ãƒ ãƒªã‚¹ãƒˆ")] public List<ItemData> items;
+    [SerializeField][Header("è½ä¸‹ã‚¹ãƒ”ãƒ¼ãƒ‰")] private float downSpeed = 10f;
+    [SerializeField][Header("ã‚¢ã‚¤ãƒ†ãƒ å‡ºç¾é–“éš”(ç§’)æœ€å°å€¤")] private float intervalMini;
+    [SerializeField][Header("ã‚¢ã‚¤ãƒ†ãƒ å‡ºç¾é–“éš” æœ€å¤§å€¤")] private float intervalMax;
+    [SerializeField][Header("ã‚¢ã‚¤ãƒ†ãƒ å‡ºç¾ç¯„å›² æ¨ªå¹…")] private float width;
+    [SerializeField][Header("ã‚¢ã‚¤ãƒ†ãƒ å‡ºç¾ç¯„å›² é«˜ã•")] private float height;
     [SerializeField] private GameObject cameraObject;
+    List<GameObject> dropItems = new List<GameObject>();    
     private float timer = 0f;
     private float intervalTime;
     private int probabilityTotal;
+    bool isStart;
     // Start is called before the first frame update
     void Start()
     {
         intervalTime = 1f;
 
     }
-
+    public void ManualStart()
+    {
+        isStart = true;
+    }
+    public void ManualStop()
+    {
+        isStart = false;
+        foreach (GameObject item in dropItems)
+        {
+            if (item != null)
+            {
+                Destroy(item);
+            }
+        }
+    }
     // Update is called once per frame
     void Update()
     {
+        if (!isStart) return;
         if (timer > intervalTime)
         {
             ItemClone();
@@ -47,10 +64,12 @@ public class ItemDrop : MonoBehaviour
         clonePosition.y = height;
         GameObject itemObject = ItemSelect().itemPrefab;
         GameObject newItem = Instantiate(itemObject);
+        dropItems.Add(newItem);
         newItem.transform.position = clonePosition;
         newItem.AddComponent<ItemControl>().moveSpeed = downSpeed;
 
-        ////rigbody‚ÌŠm”F
+
+        ////rigbodyï¿½ÌŠmï¿½F
         //Rigidbody2D newItemRb =newItem.GetComponent<Rigidbody2D>();
         //if(newItemRb != null )
         //{
