@@ -7,7 +7,7 @@ public class ItemIntervalChange : MonoBehaviour
 {
     public enum mode
     {
-        itemCount//, phase
+        itemCount,phase
     }
     public mode changeMode;
     public float itemCountincrease;
@@ -20,18 +20,23 @@ public class ItemIntervalChange : MonoBehaviour
     {
         phaseAddItem = FindAnyObjectByType<PhaseAddItem>();
         itemDrop = FindAnyObjectByType<ItemDrop>();
+        phase = PhaseAddItem.phase.shop;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if(changeMode == mode.phase)
-        //{
-        //    phaseChange();
-        //}
+        if (changeMode == mode.phase)
+        {
+            phaseChange();
+        }
     }
     public void ItemCountChange()
     {
+        if(changeMode != mode.itemCount)
+        {
+            return;
+        }
         itemDrop.intervalMax -= itemCountincrease;
         itemDrop.intervalMini -= itemCountincrease;
     }
@@ -51,8 +56,6 @@ public class ItemIntervalChange : MonoBehaviour
             phase = PhaseAddItem.phase.sky;
             Debug.Log("ê¬ãÛ");
         }
-        else
-            phase = PhaseAddItem.phase.shop;
     }
 
 }
