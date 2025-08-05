@@ -37,6 +37,7 @@ public class ScoreManager : MonoBehaviour
                 if (ScripableObjects[i].SynergyConditions.All(condition => synergyGroups[i].Contains(condition)))
                 {
                     TotalScore += ScripableObjects[i].SynergyScore;
+                    Debug.Log($"レシピ名：{ScripableObjects[i].Name},シナジースコア：{ScripableObjects[i].SynergyScore}");
                     synergyGroups[i].Dequeue(); // 一致した条件をキューから削除
                 }
             }
@@ -67,7 +68,7 @@ public class ScoreManager : MonoBehaviour
                 if (ScripableObjects[i].SynergyConditions.All(condition => synergyGroups[i].Contains(condition)))
                 {
                     synergyGroups[i].Dequeue(); // 一致した条件をキューから削除
-                    Debug.LogError($"Combo Achieved: {ScripableObjects[i].Name} with score {ScripableObjects[i].SynergyScore}");
+                    //Debug.LogError($"Combo Achieved: {ScripableObjects[i].Name} with score {ScripableObjects[i].SynergyScore}");
                     return true; // 一致したらここで終了
                 }
             }
