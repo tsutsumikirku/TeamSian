@@ -43,16 +43,16 @@ public class ScoreManager : MonoBehaviour
         }
         OnScoreUp?.Invoke(TotalScore);
     }
-    public bool ComboChack(List<IFood> foods)
+    public bool ComboChack(List<IFood> foods)//バーガーの具材がすべて渡される
     {
         List<Queue<string>> synergyGroups = new List<Queue<string>>();
         for (int i = 0; i < ScripableObjects.Length; i++)
         {
             // シナジーの名前をキューに追加
             Queue<string> synergyQueue = new Queue<string>();
-            synergyGroups.Add(synergyQueue);
+            synergyGroups.Add(synergyQueue);//List.Count == ScripableObjects.Length
         }
-        for (int j = foods.Count - 1; j >= 0; j--)
+        for (int j = foods.Count - 1; j >= 0; j--)//foodsの数から引いていく→上から見ていく
         {
             var food = foods[j];
             for (int i = 0; i < ScripableObjects.Length; i++)
