@@ -20,7 +20,6 @@ public class PutPlate : MonoBehaviour
 
     public void Update()
     {
-        // オブジェクトを順に積み上げる（Y座標計算）
         float positionY = _putTopPosition;
 
         for (int i = 0; i < _itemList.Count; i++)
@@ -29,22 +28,21 @@ public class PutPlate : MonoBehaviour
             Collider2D col = obj.GetComponent<Collider2D>();
             if (col != null)
             {
-                // 高さ分加算
-                positionY += col.bounds.size.y;
-                positionY -= col.offset.y;
-                positionY += _interval;
-            }
+                // Colliderの底辺と上辺を取得
+                float halfHeight = col.bounds.size.y / 2f;
+                float pivotOffset = col.bounds.center.y - obj.transform.position.y;
 
-            Collider2D newCol = obj.GetComponent<Collider2D>();
-            if (newCol != null)
-            {
-                float centerOffset = newCol.bounds.size.y / 2f - newCol.offset.y;
-                float localY = positionY + centerOffset;
+                // このオブジェクトのローカルYを計算（下辺がpositionYに一致するように）
+                float localY = positionY - pivotOffset + halfHeight;
 
+                // ローカル位置を設定（Xは中央に固定）
                 Vector3 newLocalPos = obj.transform.localPosition;
                 newLocalPos.x = 0f;
                 newLocalPos.y = localY;
                 obj.transform.localPosition = newLocalPos;
+
+                // 次のオブジェクトのY座標はこのオブジェクトの上辺から開始
+                positionY += col.bounds.size.y + _interval;
             }
 
             // ソート順を設定
@@ -74,6 +72,7 @@ public class PutPlate : MonoBehaviour
                 last.AddComponent<PlateCollider>();
             }
         }
+
     }
     public void BurgerReset()
     {
