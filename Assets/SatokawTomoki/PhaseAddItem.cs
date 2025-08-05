@@ -6,14 +6,22 @@ using UnityEngine;
 
 public class PhaseAddItem : MonoBehaviour
 {
+    public GameObject cameraObject;
     [System.Serializable]
     public class PhaseItem
     {
         public GameObject itemPrefab;
         public int probability;
-        public int accumulationCount;
+        public phase phaseHeight;
     }
     public List<PhaseItem> addItems;
+    public enum phase
+    {
+        shop,sky,space
+    }
+    public int shopHeight;
+    public int skyHeight;
+    public int spaceHeight;
     private ItemDrop itemDrop;
 
     // Start is called before the first frame update
@@ -27,28 +35,50 @@ public class PhaseAddItem : MonoBehaviour
     {
 
     }
-    public void AddItem(int itemCount)
+    public void AddItem()
     {
         foreach (PhaseItem item in addItems)
         {
-            if (item.accumulationCount > itemCount)
+            int goalHight = 0; 
+            switch (item.phaseHeight)
+            {
+                case phase.shop:
+                    goalHight = shopHeight;
+                    break;
+                    case phase.sky:
+                    goalHight = skyHeight;
+                    break;
+                    case phase.space:
+                    goalHight = spaceHeight;
+                    break;
+            }
+            if (goalHight > cameraObject.transform.position.y)
             {
                 continue;
             }
             bool isAdded = false;
-            foreach (ItemDrop.ItemData data in itemDrop.items)
+            int index = 0;
+            int i = 0;
+            foreach (ItemDrop.ItemData itemdata in itemDrop.items)
             {
-                if (data.itemPrefab == item.itemPrefab)
+                if (itemdata.itemPrefab == item.itemPrefab)
                 {
                     isAdded = true;
+                    index = i;
                     break;
                 }
+                i++;
             }
-            if (!isAdded)
+            ItemDrop.ItemData data = new ItemDrop.ItemData();
+            data.itemPrefab = item.itemPrefab;
+            data.probability = item.probability;
+            if (isAdded)
             {
-                ItemDrop.ItemData data = new ItemDrop.ItemData();
-                data.itemPrefab = item.itemPrefab;
-                data.probability = item.probability;
+                itemDrop.items[index] = data;
+            }
+            else
+            {
+                
                 itemDrop.items.Add(data);
             }
         }
